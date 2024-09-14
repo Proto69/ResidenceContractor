@@ -1,0 +1,36 @@
+plugins {
+    id 'java'
+}
+
+group = 'org.example'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+    maven {
+        url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
+    }
+    flatDir {
+        dirs 'libs'
+    }
+}
+
+dependencies {
+    compileOnly 'org.spigotmc:spigot-api:1.21.1-R0.1-SNAPSHOT'
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+}
+
+test {
+    useJUnitPlatform()
+}
+
+jar {
+    destinationDirectory = file("C:\\Users\\mnogo\\OneDrive\\Desktop\\Test Server\\plugins")
+    archiveFileName = project.name + ".jar"
+
+    manifest {
+        attributes(
+                'Main-Class': 'org.example.Main'
+        )
+    }
+}

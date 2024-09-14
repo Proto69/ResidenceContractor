@@ -1,0 +1,16 @@
+main: org.example.ResidenceContractor
+name: "ResidenceContractor"
+author: "Proto68"
+api-version: 1.21
+version: 1.0.0
+depend: [Residence]
+
+commands:
+  rescontract:
+    description: The main command for the ResidenceContractor plugin.
+    usage: /rescontract <subcommand>
+
+permissions:
+  rescontract.reload:
+    description: Allows the user to reload the ResidenceContractor configuration.
+    default: op

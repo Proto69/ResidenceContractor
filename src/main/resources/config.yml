@@ -1,0 +1,62 @@
+enable: true
+
+# Placeholders (not everywhere, better test)
+# %playerName%, %residenceName%, %residenceOwnerName%
+
+book:
+  title-accepted: "Contract - Accepted"
+  title-denied: "Contract - Denied"
+  author: "Admin"
+
+  # Here you can use %dateTime% for the current date and time
+  content: "Contract for residence %residenceName% \n \nThe player %playerName% have to do ... \n \nSigned: %playerName% \n \nOwner: %residenceOwnerName% \n\nAt: %dateTime%"
+
+  # Whether a book with the contract should be given to the player / owner after accepting it
+  give-to-player: true
+  give-to-owner: true
+
+database:
+  address: " "
+  database: " "
+  username: " "
+  password: " "
+
+messages:
+  prefix: "&6&lContract"
+
+  # %time% is available here
+  reloaded: "&aResidenceContractor plugin reloaded in &e%time%&ams!"
+
+  # Prompt text
+  prompt: "Do you accept the contract?"
+
+  # Prompt actions (chat buttons)
+  accept-contract: "&a&lAccept"
+  deny-contract: "&c&lDeny"
+  view-contract: "&e&lView contract"
+  accept-contract-hover: "&aAccept the contract"
+  deny-contract-hover: "&cDeny the contract"
+  view-contract-hover: "&eView the contract"
+
+  # For actions with the database
+  contract-exists: "&eContract already exists for this residence and player."
+  error-creating-contract: "&cError occurred while creating the contract!"
+  success-creating-contract: "&aSuccessfully created contract, awaiting response from the player!"
+  error-signing-contract: "&cError occurred while signing the contract!"
+
+  # Message sent when the player is offline
+  offline-player: "The player is offline, he can't sign a contract! If you want him to sign, remove him from the residence now and add him when he is online!"
+
+  # Message sent when the player didn't specify residence in the command /rescontract accept/cancel
+  missing-residence-name: "&cSpecify which residence's contract you want to sign!"
+
+  # Message sent when the player doesn't have unsigned contracts in the database
+  no-unsigned-contract: "&cYou don't have unsigned contract for this residence!"
+
+  # Message sent when the contract is accepted
+  accepting-contract-player: "Thank you for accepting the contract!"
+  accepting-contract-owner: "%playerName% accepted the contract!"
+
+  # Message sent when a contract is denied
+  denying-contract-player: "You denied the contract! You were removed from %residenceName%"
+  denying-contract-owner: "%playerName% denied the contract and was removed from the residence!"
