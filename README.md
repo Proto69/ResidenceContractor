@@ -5,7 +5,7 @@ Simple minecraft plugin, letting players sign contract when added to residence
 >Feel free to alter the code of this plugin to your needs
 
 > [!IMPORTANT]
-> The plugin is tested only on 1.21.1 Paper <br />
+> The plugin is tested only on 1.21.4 Paper <br />
 > The plugin needs [Residence](https://www.spigotmc.org/resources/residence-1-7-10-up-to-1-21.11480/) installed in order to be enabled! <br />
 
 ## Features
