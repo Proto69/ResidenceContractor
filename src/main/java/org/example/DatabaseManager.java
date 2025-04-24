@@ -1,9 +1,7 @@
 package org.example;
 
 import com.bekvon.bukkit.residence.Residence;
-import com.bekvon.bukkit.residence.protection.ClaimedResidence;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 
@@ -14,12 +12,14 @@ import java.util.logging.Logger;
 public class DatabaseManager {
     private Connection connection;
     private final FileConfiguration config;
+    private final String tableName;
 
     private final Logger logger;
 
     public DatabaseManager(FileConfiguration config, Logger logger){
         this.config = config;
         this.logger = logger;
+        this.tableName = config.getString("database.table");
     }
 
     public void connect() {
@@ -33,18 +33,17 @@ public class DatabaseManager {
         } catch (SQLException e) {
             // Log the error and continue loading the plugin
             Bukkit.getLogger().severe("Failed to connect to the database! Plugin will continue to load, but some features may not work.");
-            e.printStackTrace();
             // Optionally, you can set connection to null or handle further logic
             connection = null;
         }
     }
 
     public void createTableIfNotExists() throws SQLException {
-        String tableName = "rescontract_contracts";
         if (!doesTableExist(tableName)) {
             String query = "CREATE TABLE " + tableName + "(\n" +
                     "\tid int primary key auto_increment,\n" +
                     "    residence_name text not null,\n" +
+                    "    added_by_player_name text not null,\n" +
                     "    player_name text not null,\n" +
                     "    is_accepted bool not null default false, \n" +
                     "    is_signed bool not null default false, \n" +
@@ -73,7 +72,7 @@ public class DatabaseManager {
 
 
     public void uploadContractData(String[] data, CommandSender sender) throws SQLException {
-        String checkQuery = "SELECT COUNT(*) FROM rescontract_contracts WHERE residence_name = ? AND player_name = ?";
+        String checkQuery = "SELECT COUNT(*) FROM " + tableName + " WHERE residence_name = ? AND player_name = ?";
         PreparedStatement checkStatement = connection.prepareStatement(checkQuery);
         checkStatement.setString(1, data[0]);
         checkStatement.setString(2, data[1]);
@@ -96,10 +95,11 @@ public class DatabaseManager {
         }
 
         // Insert the new record if no match was found
-        String query = "INSERT INTO rescontract_contracts (residence_name, player_name) VALUES (?, ?)";
+        String query = "INSERT INTO " + tableName + " (residence_name,added_by_player_name, player_name) VALUES (?, ? ,?)";
         PreparedStatement statement = connection.prepareStatement(query);
         statement.setString(1, data[0]);
-        statement.setString(2, data[1]);
+        statement.setString(2, sender.getName());
+        statement.setString(3, data[1]);
 
         int num = statement.executeUpdate();
         if (num != 1) {
@@ -113,7 +113,7 @@ public class DatabaseManager {
 
 
     public List<String> getPLayerContract(CommandSender sender) throws SQLException {
-        String query = "SELECT residence_name FROM rescontract_contracts WHERE player_name = ? AND is_signed = false";
+        String query = "SELECT residence_name FROM " + tableName + " WHERE player_name = ? AND is_signed = false";
         PreparedStatement statement = connection.prepareStatement(query);
         statement.setString(1, sender.getName());
 
@@ -135,7 +135,7 @@ public class DatabaseManager {
     }
 
     public void signContract(String[] data, CommandSender sender) throws SQLException {
-        String query = "UPDATE rescontract_contracts SET is_accepted = ?, is_signed = true, signed_at = now() WHERE residence_name = ? AND player_name = ?";
+        String query = "UPDATE " + tableName + " SET is_accepted = ?, is_signed = true, signed_at = now() WHERE residence_name = ? AND player_name = ?";
         PreparedStatement statement = connection.prepareStatement(query);
 
         statement.setString(1, data[0]);
@@ -160,7 +160,7 @@ public class DatabaseManager {
 
 
     public void deleteContractData(String residenceName, String playerName) throws SQLException {
-        String query = "DELETE FROM rescontract_contracts \n" +
+        String query = "DELETE FROM " + tableName + " \n" +
                 " WHERE residence_name = ? AND player_name = ?;";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, residenceName);
@@ -175,7 +175,7 @@ public class DatabaseManager {
     }
 
     public boolean getContractData(String residenceName, String playerName) throws SQLException {
-        String query = "SELECT * FROM rescontract_contracts WHERE residence_name = ? AND player_name = ?";
+        String query = "SELECT * FROM " + tableName + " WHERE residence_name = ? AND player_name = ?";
         PreparedStatement statement = connection.prepareStatement(query);
         statement.setString(1, residenceName);
         statement.setString(2, playerName);

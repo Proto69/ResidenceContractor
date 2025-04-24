@@ -49,20 +49,22 @@ public class PlayerResidenceListener implements Listener {
                     return;
                 }
 
+                String resName = res.getResidenceName();
+
                 Map<String, String> map = new HashMap<>();
                 map.put("playerName", args[1]);
-                map.put("residenceName", res.getResidenceName());
+                map.put("residenceName", resName);
                 map.put("residenceOwnerName", sender.getName());
 
                 if (player == null) {
                     UsefulMethods.sendMessage(sender, map, "offline-player");
                     return;
                 }
-                String[] data = new String[] {res.getResidenceName(), player.getName()};
+                String[] data = new String[] {resName, player.getName()};
                 plugin.getDatabaseManager().uploadContractData(data, sender);
 
-                ContractAcceptanceTracker.trackContractResponse(player, res.getResidenceName(), plugin, sender);
-                BookUtil.showContractBook(player, res.getResidenceName());
+                ContractAcceptanceTracker.trackContractResponse(player, resName, plugin);
+                BookUtil.showContractBook(player, resName);
 
             } else {
                 if (Bukkit.getPlayer(args[2]) == null && !Bukkit.getOfflinePlayer(args[2]).hasPlayedBefore()){
@@ -80,9 +82,11 @@ public class PlayerResidenceListener implements Listener {
                     return;
                 }
 
+                String resName = res.getResidenceName();
+
                 Map<String, String> map = new HashMap<>();
                 map.put("playerName", args[2]);
-                map.put("residenceName", res.getResidenceName());
+                map.put("residenceName", resName);
                 map.put("residenceOwnerName", sender.getName());
 
                 if (player == null){
@@ -90,11 +94,11 @@ public class PlayerResidenceListener implements Listener {
                     return;
                 }
 
-                String[] data = new String[] {res.getResidenceName(), player.getName()};
+                String[] data = new String[] {resName, player.getName()};
                 plugin.getDatabaseManager().uploadContractData(data, sender);
 
-                ContractAcceptanceTracker.trackContractResponse(player, res.getResidenceName(), plugin, sender);
-                BookUtil.showContractBook(player, res.getResidenceName());
+                ContractAcceptanceTracker.trackContractResponse(player, resName, plugin);
+                BookUtil.showContractBook(player, resName);
             }
         }
         else if (Objects.equals(args[0], "pdel")){

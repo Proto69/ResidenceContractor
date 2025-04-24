@@ -4,6 +4,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -11,13 +12,13 @@ import java.util.Map;
 
 public class ContractCommand implements CommandExecutor {
 
-    private ResidenceContractor plugin;
+    private final ResidenceContractor plugin;
 
     public ContractCommand(ResidenceContractor plugin){
         this.plugin = plugin;
     }
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
 
         if (args.length < 2){
             Map<String, String> map = new HashMap<>();

@@ -4,20 +4,21 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.sql.SQLException;
 import java.util.*;
 
 public class PluginTabCompleter implements TabCompleter {
 
-    private ResidenceContractor plugin;
+    private final ResidenceContractor plugin;
 
     public PluginTabCompleter(ResidenceContractor plugin){
         this.plugin = plugin;
     }
 
     @Override
-    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
         if (!(sender instanceof Player)) {
             sender.sendMessage("Only players can use this command.");
             return null;
@@ -30,11 +31,10 @@ public class PluginTabCompleter implements TabCompleter {
                 if (sender.hasPermission("rescontract.reload")) {
                     suggestions.add("reload");
                 }
-            } else if (args.length == 2){
                 suggestions.add("accept");
                 suggestions.add("deny");
                 suggestions.add("view");
-            } else if (args.length == 3 && !Objects.equals(args[1], "view")){
+            } else if (args.length == 2 && !Objects.equals(args[0], "reload")){
                 try {
                     suggestions.addAll(plugin.getDatabaseManager().getPLayerContract(sender));
                 } catch (SQLException e) {

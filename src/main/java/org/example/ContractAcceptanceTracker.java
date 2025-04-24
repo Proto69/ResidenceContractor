@@ -1,14 +1,13 @@
 package org.example;
 
 import com.bekvon.bukkit.residence.Residence;
-import com.bekvon.bukkit.residence.containers.ResidencePlayer;
 import com.bekvon.bukkit.residence.protection.ClaimedResidence;
+import com.bekvon.bukkit.residence.protection.FlagPermissions;
+import com.bekvon.bukkit.residence.protection.ResidencePermissions;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import org.bukkit.Bukkit;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -19,15 +18,18 @@ import java.util.*;
 
 public class ContractAcceptanceTracker {
 
-    public static void trackContractResponse(Player player, String residenceName, ResidenceContractor plugin, CommandSender sender) {
+    private static final int delay = Integer.parseInt(UsefulMethods.readConfig("settings.prompt-delay"));
+
+    public static void trackContractResponse(Player player, String residenceName, ResidenceContractor plugin) {
         // Start a repeated task to check if the player responded or closed the book
         new BukkitRunnable() {
             @Override
             public void run() {
 
+
                     boolean response;
                     try {
-                        response = plugin.getDatabaseManager().getContractData(residenceName, sender.getName());
+                        response = plugin.getDatabaseManager().getContractData(residenceName, player.getName());
                     } catch (SQLException e) {
                         throw new RuntimeException(e);
                     }
@@ -41,7 +43,7 @@ public class ContractAcceptanceTracker {
                         sendPrompt(player, residenceName);
                     }
             }
-        }.runTaskTimer(plugin, 0, 20 * 10); // Check every 10 seconds
+        }.runTaskTimer(plugin, 0, 20L * delay);
     }
 
     // Called when the player responds to the contract
@@ -75,7 +77,15 @@ public class ContractAcceptanceTracker {
 
         if (accepted) {
             UsefulMethods.sendMessage(player, map, "accepting-contract-player");
-            res.getPermissions().applyDefaultFlags(player, false);
+
+            ResidencePermissions perms = res.getPermissions();
+
+            String[] defaultPerms = new String[] {"container", "move", "harvest", "shear", "use", "destroy", "animalkilling", "beacon", "mobkilling", "build", "chat", "tp", "leash"};
+
+            for (String perm : defaultPerms){
+                perms.setPlayerFlag(player.getName(), perm, FlagPermissions.FlagState.TRUE);
+            }
+
             assert owner != null;
             UsefulMethods.sendMessage(owner, map, "accepting-contract-owner");
             ItemStack item = BookUtil.getBook(player, residenceName, UsefulMethods.readConfig("book.title-accepted"), UsefulMethods.readConfig("book.author"));

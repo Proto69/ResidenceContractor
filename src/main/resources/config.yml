@@ -8,7 +8,7 @@ book:
   title-denied: "Contract - Denied"
   author: "Admin"
 
-  # Here you can use %dateTime% for the current date and time
+  # Here you can use %dateTime% for the current date and time and all other placeholders
   content: "Contract for residence %residenceName% \n \nThe player %playerName% have to do ... \n \nSigned: %playerName% \n \nOwner: %residenceOwnerName% \n\nAt: %dateTime%"
 
   # Whether a book with the contract should be given to the player / owner after accepting it
@@ -21,16 +21,24 @@ database:
   username: " "
   password: " "
 
+settings:
+  # The delay between sending again the prompt for signing the contract (in seconds)
+  prompt-delay: 20
+
 messages:
   prefix: "&6&lContract"
 
-  # %time% is available here
-  reloaded: "&aResidenceContractor plugin reloaded in &e%time%&ams!"
+  # Only %time% is available here
+  reloaded: "&aPlugin reloaded in &e%time%&ams!"
 
-  # Prompt text
+  # Prompt text (all placeholders)
   prompt: "Do you accept the contract?"
 
+  # Usage of /rescontract command (no placeholder)
+  usage: "..."
+
   # Prompt actions (chat buttons)
+  # No placeholders
   accept-contract: "&a&lAccept"
   deny-contract: "&c&lDeny"
   view-contract: "&e&lView contract"
@@ -38,25 +46,25 @@ messages:
   deny-contract-hover: "&cDeny the contract"
   view-contract-hover: "&eView the contract"
 
-  # For actions with the database
+  # For actions with the database (all placeholders)
   contract-exists: "&eContract already exists for this residence and player."
   error-creating-contract: "&cError occurred while creating the contract!"
   success-creating-contract: "&aSuccessfully created contract, awaiting response from the player!"
   error-signing-contract: "&cError occurred while signing the contract!"
 
-  # Message sent when the player is offline
+  # Message sent when the player is offline (all placeholders)
   offline-player: "The player is offline, he can't sign a contract! If you want him to sign, remove him from the residence now and add him when he is online!"
 
-  # Message sent when the player didn't specify residence in the command /rescontract accept/cancel
+  # Message sent when the player didn't specify residence in the command /rescontract accept/deny (no placeholders)
   missing-residence-name: "&cSpecify which residence's contract you want to sign!"
 
-  # Message sent when the player doesn't have unsigned contracts in the database
+  # Message sent when the player doesn't have unsigned contracts in the database (all placeholders)
   no-unsigned-contract: "&cYou don't have unsigned contract for this residence!"
 
-  # Message sent when the contract is accepted
+  # Message sent when the contract is accepted (all placeholders)
   accepting-contract-player: "Thank you for accepting the contract!"
   accepting-contract-owner: "%playerName% accepted the contract!"
 
-  # Message sent when a contract is denied
+  # Message sent when a contract is denied (all placeholders)
   denying-contract-player: "You denied the contract! You were removed from %residenceName%"
   denying-contract-owner: "%playerName% denied the contract and was removed from the residence!"

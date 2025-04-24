@@ -24,7 +24,7 @@ public class BookUtil{
     public static ItemStack getBook(Player player, String residenceName, String title, String author){
         ClaimedResidence res = Residence.getInstance().getResidenceManager().getByName(residenceName);
 
-        // Create a Written Book (uneditable)
+        // Create a Written Book
         ItemStack writtenBook = new ItemStack(Material.WRITTEN_BOOK);
         BookMeta meta = (BookMeta) writtenBook.getItemMeta();
 
